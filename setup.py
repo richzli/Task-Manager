@@ -6,16 +6,18 @@ def setup():
 
     curs_task = conn_task.cursor()
     curs_done = conn_done.cursor()
-
+    
     command = """
     CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    type TEXT DEFAULT "task",
     description TEXT,
     priority INTEGER DEFAULT 0,
     due_date INTEGER
     );
     """
+    #persistent tasks: due date = NULL
 
     curs_task.execute(command)
     curs_done.execute(command)
