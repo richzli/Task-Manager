@@ -3,35 +3,36 @@ from os.path import exists
 from contextlib import closing
 
 def setup():
-    if not exists("../data"):
+    if not exists("./taskmanager/data"):
         from os import makedirs
-        makedirs("../data")
+        makedirs("./taskmanager/data")
     
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             command_task = """
             CREATE TABLE IF NOT EXISTS tasks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            type TEXT DEFAULT "task",
+            type TEXT DEFAULT "todo",
             description TEXT,
             priority INTEGER DEFAULT 0,
             sticky INTEGER DEFAULT 0,
-            due_date INTEGER
+            date INTEGER
             );
             """
             command_done = """
             CREATE TABLE IF NOT EXISTS done (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            type TEXT DEFAULT "task",
+            type TEXT DEFAULT "todo",
             description TEXT,
             priority INTEGER DEFAULT 0,
             sticky INTEGER DEFAULT 0,
-            due_date INTEGER
+            date INTEGER
             );
             """
-            #persistent tasks: due date = NULL
+            #types: todo, event
+            #persistent tasks: date = NULL
             
             curs.execute(command_task)
             curs.execute(command_done)

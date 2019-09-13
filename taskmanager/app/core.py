@@ -8,11 +8,11 @@ def add_task(data: dict) -> None:
     @param data A dictionary holding pairs of column names and values.
     """
     
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             fields = str(tuple(data.keys())).replace("'", "")
             values = tuple(data.values())
-            insert = "(" + ("?,"*len(values))[:-2] + ")"
+            insert = "(" + ("?,"*len(values))[:-1] + ")"
 
             sql = "INSERT INTO tasks " + fields + " VALUES " + insert
 
@@ -27,7 +27,7 @@ def update_task(taskid: int, data: dict) -> None:
     @param data A dictionary holding pairs of column names and values.
     """
     
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             fields = tuple(data.keys())
             values = tuple(data.values())
@@ -46,7 +46,7 @@ def finish_task(taskid: int) -> None:
 
     """
 
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             sql1 = "INSERT INTO done SELECT * FROM tasks WHERE id=?"
             sql2 = "DELETE FROM tasks WHERE id=?"
@@ -63,7 +63,7 @@ def unfinish_task(taskid: int) -> None:
 
     """
 
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             sql1 = "INSERT INTO tasks SELECT * FROM done WHERE id=?"
             sql2 = "DELETE FROM done WHERE id=?"
