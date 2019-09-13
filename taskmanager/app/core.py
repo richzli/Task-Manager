@@ -26,6 +26,9 @@ def update_task(taskid: int, data: dict) -> None:
     @param taskid The ID of the task to be updated.
     @param data A dictionary holding pairs of column names and values.
     """
+
+    if data == {}:
+        return
     
     with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
