@@ -1,4 +1,7 @@
 from taskmanager.app import core
+import os
+import sqlite3
+from contextlib import closing
 
 ### [id, name, type, description, priority, sticky, date] ###
 
@@ -19,12 +22,12 @@ def test_add_task():
     core.add_task(sample_task_1)
     core.add_task(sample_task_2)
     core.add_task(sample_task_3)
-
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             assert curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][2] == "todo"
             assert curs.execute("SELECT * FROM tasks WHERE name='talk to prof about lab'").fetchall()[0][4] == 2
-            assert curs.execute("SELECT * FROM tasks").fetchall()[3][2] == "event"
+            assert curs.execute("SELECT * FROM tasks").fetchall()[2][2] == "event"
             assert len(curs.execute("SELECT * FROM tasks WHERE type='event'").fetchall()) == 2
 
     print("test_add_task() success!")
@@ -36,7 +39,7 @@ def test_update_task():
     core.update_task(3, {"sticky": 1, "description": "remember to lift!"})
     core.update_task(2, {})
     
-    with closing(sqlite3.connect("../data/tasks.db")) as conn:
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             assert curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][3] == "hw 1.5\nquestions 5, 12, 21, 24"
             assert curs.execute("SELECT * FROM tasks WHERE id=3").fetchall()[0][5] == 1

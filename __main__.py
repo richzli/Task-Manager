@@ -11,6 +11,7 @@ def run_tests():
 
     setup.test_setup()
     core.test_add_task()
+    core.test_update_task()
 
 if __name__ == "__main__":
     reset()
