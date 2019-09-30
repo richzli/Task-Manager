@@ -47,3 +47,7 @@ def test_update_task():
 
     print("test_update_task() success!")
 
+def test_finish_unfinish_task():
+    # assumes test_update_task() has already been run #
+
+    core.finish()
