@@ -10,7 +10,7 @@ def run_tests():
     core.test_update_task()
 
 if __name__ == "__main__":
-   import taskmanager.tests.test_core as core
-   core.reset()
+    import taskmanager.tests.test_core as core
+    core.reset()
     
     

@@ -74,3 +74,9 @@ def unfinish_task(taskid: int) -> None:
             curs.execute(sql1, (taskid,))
             curs.execute(sql2, (taskid,))
         conn.commit()
+
+def get_next_date(repeating: int, currdate: int) -> int:
+    return 0
+
+def get_prev_date(repeating: int, currdate: int) -> int:
+    return 0

@@ -2,12 +2,13 @@ import sqlite3
 from os.path import exists
 from contextlib import closing
 
-def setup():
-    if not exists("./taskmanager/data"):
+def setup(mode=0):
+    dbfile = "./taskmanager/data"
+    if not exists(dbfile):
         from os import makedirs
-        makedirs("./taskmanager/data")
+        makedirs(dbfile)
     
-    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
+    with closing(sqlite3.connect(dbfile + "/tasks.db")) as conn:
         with closing(conn.cursor()) as curs:
             command_task = """
             CREATE TABLE IF NOT EXISTS tasks (
@@ -17,7 +18,8 @@ def setup():
             description TEXT,
             priority INTEGER DEFAULT 0,
             sticky INTEGER DEFAULT 0,
-            date INTEGER
+            date INTEGER,
+            repeating INTEGER DEFAULT 0
             );
             """
             command_done = """
@@ -28,11 +30,17 @@ def setup():
             description TEXT,
             priority INTEGER DEFAULT 0,
             sticky INTEGER DEFAULT 0,
-            date INTEGER
+            date INTEGER,
+            repeating INTEGER DEFAULT 0
             );
             """
-            #types: todo, event
+            #types: todo, hw, event
             #persistent tasks: date = NULL
+                #repeating tasks: repeating = some integer
+                #0 = sunday, 1 = monday, ..., 6 = saturday
+                #stored in binary, so 1 = sunday 2 = monday... 64 = saturday
+                #so if repated 
+            
             
             curs.execute(command_task)
             curs.execute(command_done)
