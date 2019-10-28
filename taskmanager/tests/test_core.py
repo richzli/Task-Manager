@@ -41,44 +41,43 @@ def update_task():
 def finish_task():
     # assumes add_task() has already been run #
 
-    core.finish()
+    core.finish_task(2)
 
-class Test(unittest.TestCase):
+class TestCore(unittest.TestCase):
 
-    def test_add(self):
-        setup.setup(1)
-        add_task()
-        
-        with closing(sqlite3.connect("./taskmanager/tests/data/tasks.db")) as conn:
-            with closing(conn.cursor()) as curs:
-                assert curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][2] == "todo"
-                assert curs.execute("SELECT * FROM tasks WHERE name='talk to prof about lab'").fetchall()[0][4] == 2
-                assert curs.execute("SELECT * FROM tasks").fetchall()[2][2] == "event"
-                assert len(curs.execute("SELECT * FROM tasks WHERE type='event'").fetchall()) == 2
-
-        print("add_task() success!")
-
+    def setUp(self):
+        setup.setup()
+    
+    def tearDown(self):
         reset()
 
+    def test_add(self):
+        add_task()
+        with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
+            with closing(conn.cursor()) as curs:
+                self.assertEqual(curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][2], "todo")
+                self.assertEqual(curs.execute("SELECT * FROM tasks WHERE name='talk to prof about lab'").fetchall()[0][4], 2)
+                self.assertEqual(curs.execute("SELECT * FROM tasks").fetchall()[2][2], "event")
+                self.assertEqual(len(curs.execute("SELECT * FROM tasks WHERE type='event'").fetchall()), 2)
+
+        print("test_add() success!")
+
     def test_update(self):
-        setup.setup(1)
         add_task()
         update_task()
 
-        with closing(sqlite3.connect("./taskmanager/tests/data/tasks.db")) as conn:
+        with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
             with closing(conn.cursor()) as curs:
-                assert curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][3] == "hw 1.5\nquestions 5, 12, 21, 24"
-                assert curs.execute("SELECT * FROM tasks WHERE id=3").fetchall()[0][5] == 1
-                assert curs.execute("SELECT * FROM tasks WHERE id=3").fetchall()[0][3] != None
+                self.assertEqual(curs.execute("SELECT * FROM tasks WHERE id=1").fetchall()[0][3], "hw 1.5\nquestions 5, 12, 21, 24")
+                self.assertEqual(curs.execute("SELECT * FROM tasks WHERE id=3").fetchall()[0][5], 1)
+                self.assertNotEqual(curs.execute("SELECT * FROM tasks WHERE id=3").fetchall()[0][3], None)   
 
-        print("update_task() success!")        
-
-        reset()
+        print("test_update() success!")    
 
     def test_finish(self):
-        setup.setup(1)
         add_task()
         finish_task()
 
-        reset()
-        
+        print("test_finish() success!")
+
+#unittest.main()

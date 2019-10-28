@@ -2,7 +2,7 @@ import sqlite3
 from os.path import exists
 from contextlib import closing
 
-def setup(mode=0):
+def setup():
     dbfile = "./taskmanager/data"
     if not exists(dbfile):
         from os import makedirs
@@ -24,6 +24,18 @@ def setup(mode=0):
             """
             command_done = """
             CREATE TABLE IF NOT EXISTS done (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            type TEXT DEFAULT "todo",
+            description TEXT,
+            priority INTEGER DEFAULT 0,
+            sticky INTEGER DEFAULT 0,
+            date INTEGER,
+            repeating INTEGER DEFAULT 0
+            );
+            """
+            command_deleted = """
+            CREATE TABLE IF NOT EXISTS deleted (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             type TEXT DEFAULT "todo",

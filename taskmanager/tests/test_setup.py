@@ -1,10 +1,14 @@
 from ..setup import setup
 from os.path import exists
+import unittest
 
-def test_setup():
-    setup.setup(1)
+class TestSetup(unittest.TestCase):
+    def test_setup(self):
+        setup.setup()
 
-    assert exists("./taskmanager/data")
-    assert exists("./taskmanager/data/tasks.db")
+        self.assertTrue(exists("./taskmanager/data"))
+        self.assertTrue(exists("./taskmanager/data/tasks.db"))
 
-    print("test_setup() success!")
+        print("test_setup() success!")
+
+#unittest.main()
