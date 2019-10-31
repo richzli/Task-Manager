@@ -56,6 +56,7 @@ def setup():
             
             curs.execute(command_task)
             curs.execute(command_done)
+            curs.execute(command_deleted)
         conn.commit()
 
 if __name__ == "__main__":

@@ -79,5 +79,3 @@ class TestCore(unittest.TestCase):
         finish_task()
 
         print("test_finish() success!")
-
-#unittest.main()

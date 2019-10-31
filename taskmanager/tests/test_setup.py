@@ -10,5 +10,3 @@ class TestSetup(unittest.TestCase):
         self.assertTrue(exists("./taskmanager/data/tasks.db"))
 
         print("test_setup() success!")
-
-#unittest.main()
