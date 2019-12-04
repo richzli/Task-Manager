@@ -16,3 +16,8 @@ def index():
 @app.route("/about/")
 def about():
     return render_template("about.html")
+
+@app.route("/app/")
+def app():
+    tasks = core.get_tasks()
+    return render_template()

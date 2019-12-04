@@ -1,5 +1,20 @@
 import sqlite3
 from contextlib import closing
+import time
+
+def get_tasks() -> list:
+    """
+    Gets tasks from the file.
+    
+    @return a list of tasks.
+    """
+
+    with closing(sqlite3.connect("./taskmanager/data/tasks.db")) as conn:
+        with closing(conn.cursor()) as curs:
+            date = time.strftime("%Y%m%d")
+
+            curs.execute("SELECT * FROM tasks WHERE date = %s" % (date))
+            data = curs.fetchall()
 
 def add_task(data: dict) -> None:
     """
@@ -14,7 +29,7 @@ def add_task(data: dict) -> None:
             values = tuple(data.values())
             insert = "(" + ("?,"*len(values))[:-1] + ")"
 
-            sql = "INSERT INTO tasks " + fields + " VALUES " + insert
+            sql = "INSERT INTO tasks %s VALUES %s" % (fields, insert)
 
             curs.execute(sql, values)
         conn.commit()
